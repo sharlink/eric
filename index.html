@@ -2,20 +2,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="icon" href="mosh.PNG">
+    <link rel="icon" href="images/mosh.PNG">
     <style>
         body {
             color: rgb(15, 15, 15);
             font-family: sans-serif;
             font-size: 45px;
-            background-image: url("images/backss.PNG");
+            /*background-image: url("images/backss.PNG");*/
         }
     </style>
 </head>
 <body>
 
     <title>Clock</title>
-    <p align=center>  Eric Page</p>
+    <p align=center>  Eric Xavier</p>
     <p align=center>
 
         <canvas id="canvas" width="400" height="400"
@@ -23,6 +23,7 @@
         </canvas>
 
     </p> <p align=center id="time"></p>
+    <p align="center" id="digital time"></p>
 
     <script>
 var canvas = document.getElementById("canvas");
@@ -30,7 +31,7 @@ var ctx = canvas.getContext("2d");
 var radius = canvas.height / 2;
 ctx.translate(radius, radius);
 radius = radius * 0.90
-setInterval(drawClock, 1000);
+setInterval(drawClock, 100);
 
 function drawClock() {
   drawFace(ctx, radius);
@@ -109,8 +110,7 @@ var date = today.getDate() +' - '+ today.getMonth() +' - '+ today.getFullYear();
 document.getElementById("time").innerHTML = date;
 
 
-var time = new time();
-var Clock = time.get
+        var time = new drawTime 
     </script>
 
 </body>

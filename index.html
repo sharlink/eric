@@ -1,118 +1,234 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="icon" href="images/mosh.PNG">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style/home.css" />
+    <sript src="js/home.js"></sript>
     <style>
-        body {
-            color: rgb(15, 15, 15);
-            font-family: sans-serif;
-            font-size: 45px;
-            background-image: url("images/Capturemass.PNG");
-            /*background-image: url("images/backss.PNG");*/
-        }
     </style>
 </head>
 <body>
 
-    <title>Clock</title>
-    <p align=center>Welcome</p>
-    <p align=center>
+    <button class="tablink" onclick="openPage('Home', this, 'red')" id="defaultOpen">Clock</button>
+    <button class="tablink" onclick="openPage('News', this, 'green')">Stop Watch</button>
+    <button class="tablink" onclick="openPage('Contact', this, 'blue')">Contact</button>
+    <button class="tablink" onclick="openPage('About', this, 'orange')">About</button>
 
-        <canvas id="canvas" width="400" height="400"
-                style="background-color:rgb(0, 253, 219)">
-        </canvas>
+    <div id="Home" class="tabcontent">
 
-    </p> <p align=center id="time"></p>
-    <p align="center" id="digital time"></p>
+        <p align=center>  Eric Xavier</p>
+        <p align=center>
+
+            <canvas id="canvas" width="400" height="400"
+                    style="background-color:rgb(0, 253, 219)">
+            </canvas>
+
+        </p> <p align=center id="time"></p>
+        <p align="center" id="digitaltime"></p>
+
+        <script>
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            var radius = canvas.height / 2;
+            ctx.translate(radius, radius);
+            radius = radius * 0.90
+            setInterval(drawClock, 100);
+
+            function drawClock() {
+                drawFace(ctx, radius);
+                drawNumbers(ctx, radius);
+                drawTime(ctx, radius);
+            }
+
+            function drawFace(ctx, radius) {
+                var grad;
+                ctx.beginPath();
+                ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+                ctx.fillStyle = 'white';
+                ctx.fill();
+                grad = ctx.createRadialGradient(0, 0, radius * 0.95, 0, 0, radius * 1.05);
+                grad.addColorStop(0, '#252');
+                grad.addColorStop(0.5, 'black');
+                grad.addColorStop(1, '#999');
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = radius * 0.1;
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(0, 0, radius * 0.1, 0, 2 * Math.PI);
+                ctx.fillStyle = '#352';
+                ctx.fill();
+            }
+
+            function drawNumbers(ctx, radius) {
+                var ang;
+                var num;
+                ctx.font = radius * 0.15 + "px arial";
+                ctx.textBaseline = "middle";
+                ctx.textAlign = "center";
+                for (num = 1; num < 13; num++) {
+                    ang = num * Math.PI / 6;
+                    ctx.rotate(ang);
+                    ctx.translate(0, -radius * 0.85);
+                    ctx.rotate(-ang);
+                    ctx.fillText(num.toString(), 0, 0);
+                    ctx.rotate(ang);
+                    ctx.translate(0, radius * 0.85);
+                    ctx.rotate(-ang);
+                }
+            }
+            function drawTime(ctx, radius) {
+                var now = new Date();
+                var hour = now.getHours();
+                var minute = now.getMinutes();
+                var second = now.getSeconds();
+                //hour
+                hour = hour % 12;
+                hour = (hour * Math.PI / 6) +
+                    (minute * Math.PI / (6 * 60)) +
+                    (second * Math.PI / (360 * 60));
+                drawHand(ctx, hour, radius * 0.5, radius * 0.07);
+                //minute
+                minute = (minute * Math.PI / 30) + (second * Math.PI / (30 * 60));
+                drawHand(ctx, minute, radius * 0.8, radius * 0.07);
+                // second
+                second = (second * Math.PI / 30);
+                drawHand(ctx, second, radius * 0.9, radius * 0.02);
+            }
+
+            function drawHand(ctx, pos, length, width) {
+                ctx.beginPath();
+                ctx.lineWidth = width;
+                ctx.lineCap = "round";
+                ctx.moveTo(0, 0);
+                ctx.rotate(pos);
+                ctx.lineTo(0, -length);
+                ctx.stroke();
+                ctx.rotate(-pos);
+            }
+            var today = new Date();
+
+            var date = today.getDate() + ' - ' + today.getMonth() + ' - ' + today.getFullYear();
+            document.getElementById("time").innerHTML = date;
+
+
+            var today = new Date();
+
+            var time = today.getHours() + '-' + today.getMinutes() + '-' + today.getSeconds(); +'-' + today.getMilliseconds()
+            document.getElementById("digitaltime")
+        </script>
+    </div>
+
+    <div id="News" class="tabcontent">
+
+        <p align="center">
+            <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>:<span id="tens">00</span><br />
+            <button id="button-start">start</button><br />
+            <button id="button-stop">stop</button>
+            <button id="button-reset">reset</button>
+
+        </p>
+
+
+
+    </div>
+
+    <div id="Contact" class="tabcontent">
+        <h3>Contact</h3>
+        <p>Get in touch, or swing by for a cup of coffee.</p>
+        <p>Email : send2erics@gmail.com</p>
+    </div>
+
 
     <script>
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-var radius = canvas.height / 2;
-ctx.translate(radius, radius);
-radius = radius * 0.90
-setInterval(drawClock, 100);
+        function openPage(pageName, elmnt, color) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+            document.getElementById(pageName).style.display = "block";
+            elmnt.style.backgroundColor = color;
+        }
 
-function drawClock() {
-  drawFace(ctx, radius);
-  drawNumbers(ctx, radius);
-  drawTime(ctx, radius);
-}
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
 
-function drawFace(ctx, radius) {
-  var grad;
-  ctx.beginPath();
-  ctx.arc(0, 0, radius, 0, 2*Math.PI);
-  ctx.fillStyle = 'white';
-  ctx.fill();
-  grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
-  grad.addColorStop(0, '#252');
-  grad.addColorStop(0.5, 'black');
-  grad.addColorStop(1, '#999');
-  ctx.strokeStyle = grad;
-  ctx.lineWidth = radius*0.1;
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
-  ctx.fillStyle = '#352';
-  ctx.fill();
-}
+        /*=============TIMER SCRIPT==========*/
+        var hours = 00;
+        var minutes = 00;
+        var seconds = 00;
+        var tens = 00;
+        var appendTens = document.getElementById('tens');
+        var appendSeconds = document.getElementById('seconds');
+        var appendMinutes = document.getElementById('minutes')
+        var appendHours = document.getElementById('hours')
+        var buttonStart = document.getElementById("button-start");
+        var buttonStop = document.getElementById("button-stop");
+        var buttonRest = document.getElementById("button-reset");
+        var interval;
+        
+        function startTimer() {
+            tens++;
+            if (tens < 9) {
+                appendTens.innerHTML = "0" + tens;
+            }
+            if (tens > 9) {
+                appendTens.innerHTML = tens;
 
-function drawNumbers(ctx, radius) {
-  var ang;
-  var num;
-  ctx.font = radius*0.15 + "px arial";
-  ctx.textBaseline="middle";
-  ctx.textAlign="center";
-  for(num = 1; num < 13; num++){
-    ang = num * Math.PI / 6;
-    ctx.rotate(ang);
-    ctx.translate(0, -radius*0.85);
-    ctx.rotate(-ang);
-    ctx.fillText(num.toString(), 0, 0);
-    ctx.rotate(ang);
-    ctx.translate(0, radius*0.85);
-    ctx.rotate(-ang);
-  }
-}
-function drawTime(ctx, radius){
-    var now = new Date();
-    var hour = now.getHours();
-    var minute = now.getMinutes();
-    var second = now.getSeconds();
-    //hour
-    hour=hour%12;
-    hour=(hour*Math.PI/6)+
-    (minute*Math.PI/(6*60))+
-    (second*Math.PI/(360*60));
-    drawHand(ctx, hour, radius*0.5, radius*0.07);
-    //minute
-    minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
-    drawHand(ctx, minute, radius*0.8, radius*0.07);
-    // second
-    second=(second*Math.PI/30);
-    drawHand(ctx, second, radius*0.9, radius*0.02);
-}
+            }
+            if (tens > 99) {
+                seconds++;
 
-function drawHand(ctx, pos, length, width) {
-    ctx.beginPath();
-    ctx.lineWidth = width;
-    ctx.lineCap = "round";
-    ctx.moveTo(0,0);
-    ctx.rotate(pos);
-    ctx.lineTo(0, -length);
-    ctx.stroke();
-    ctx.rotate(-pos);
-}
-var today = new Date();
+                appendSeconds.innerHTML = "0" + seconds;
+                tens = 0;
+                appendTens.innerHTML = "0" + 0;
+            }
 
-var date = today.getDate() +' - '+ today.getMonth() +' - '+ today.getFullYear();
-document.getElementById("time").innerHTML = date;
+            if (seconds > 9) {                
+                appendSeconds.innerHTML = seconds;
+            }
+            if (seconds < 9) {
+                appendSeconds.innerHTML = "0" + seconds;
+
+            }
+            if (seconds > 59) {
+                minutes++;
+
+                appendMinutes.innerHTML = "0" + minutes;
+                seconds = 0;
+                appendSeconds.innerHTML = "0" + 0;
+
+            }
+            if (minutes > 9) {
+                appendMinutes.innerHTML = minutes;
+            }
+            if (minutes < 9) {
+                appendMinutes.innerHTML = "0" + minutes;
+            } 
+            if (minutes > 59) {
+                hours++;
+
+                appendHours.innerHTML = "0" + hours;
+                minutes = 0;
+                appendMinutes.innerHTML = "0" + 0;
+            }
 
 
-        var time = new drawTime 
+
+        }
+
+       
+        buttonStart.onclick = function () {
+            interval = setInterval(startTimer);
+        };
+
+        
+
     </script>
 
 </body>
-</html>
+</html> 
